@@ -1,8 +1,8 @@
-interface RootObject {
+type RootObject = {
   posted: Posted[];
-}
+};
 
-interface Posted {
+type Posted = {
   packageName: string;
   systemTime: number;
   isClearable: boolean;
@@ -16,4 +16,4 @@ interface Posted {
   textSub: string;
   textSummary: string;
   appName: string;
-}
+};
