@@ -42,6 +42,16 @@ export default function Home() {
     return a && b;
   });
 
+  function toggled(p: string) {
+    setSelectPkgs((prev) => {
+      if (prev.includes(p)) {
+        return prev.remove(prev.indexOf(p));
+      }
+
+      return [...new Set([...prev, p])];
+    });
+  }
+
   useEffect(() => {
     importData<RootObject>(file).then(setJsonData);
   }, [file]);
@@ -49,8 +59,12 @@ export default function Home() {
   return (
     <div className="p-4 flex flex-col gap-2">
       <div className="flex gap-2">
-        <input className="flex-1 border p-2 rounded-xl" onChange={(e) => setSearch(e.target.value)} />
-        <input className="flex-1 border p-2 rounded-xl"
+        <input
+          className="flex-1 border p-2 rounded-xl"
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <input
+          className="flex-1 border p-2 rounded-xl"
           type="file"
           accept=".json"
           onChange={(e) => {
@@ -61,13 +75,22 @@ export default function Home() {
         />
       </div>
 
-      {packages.map((p) => (
-        <button
-          onClick={() => setSelectPkgs((prev) => [...new Set([...prev, p])])}
-        >
-          {p}
-        </button>
-      ))}
+      <div className="flex gap-2">
+        {packages.map((p) => {
+          const selected = selectPkgs.includes(p);
+          return (
+            <button
+              className={classNames("flex-1 p-4 rounded-xl text-white", {
+                "bg-gray-700": !selected,
+                "bg-green-700": selected,
+              })}
+              onClick={() => toggled(p)}
+            >
+              {p}
+            </button>
+          );
+        })}
+      </div>
 
       <div className="flex flex-col gap-2">
         {posted.map((post) => {
